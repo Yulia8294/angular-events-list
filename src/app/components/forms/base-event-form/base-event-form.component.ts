@@ -13,6 +13,7 @@ import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { BASE_EVENT_FORM_FIELDS } from '../event-form-fields';
 import { Observable } from 'rxjs';
 import { TextareaModule } from 'primeng/textarea';
+import { Event } from '../../../model/event.model';
 
 export const sharedBaseEventFormImports = [
   InputTextModule,

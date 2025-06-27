@@ -51,9 +51,13 @@ export class EventsService {
   }
 
   addEvent(event: Event): Observable<Event> {
-    this.events.update((events) => [...events, event]);
+    const newEvent: Event = {
+      ...event,
+      id: this.generateId(),
+    };
+    this.events.update((events) => [...events, newEvent]);
     // simulate returning server response
-    return of(event);
+    return of(newEvent);
   }
 
   updateEvent(updatedEvent: Event): Observable<Event> {
@@ -72,6 +76,6 @@ export class EventsService {
   }
 
   generateId(): string {
-    return Math.random().toString(36).substring(2, 9);
+    return Math.random().toString(36).substring(2, 10);
   }
 }

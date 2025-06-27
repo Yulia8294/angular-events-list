@@ -6,10 +6,13 @@ import {
   BaseEventModalData,
   sharedBaseEventFormImports,
 } from '../base-event-form/base-event-form.component';
-import { Event } from '../../../model/event.model';
+import { EventType, MusicEvent } from '../../../model/event.model';
 import { MUSIC_EVENT_FORM_FIELDS } from '../event-form-fields';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { EventFormService } from '../../../model/event-form.service';
+
+type MusicFormFields = typeof MUSIC_EVENT_FORM_FIELDS;
 
 @Component({
   selector: 'app-music-event-form',
@@ -20,43 +23,33 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MusicEventFormComponent {
-  private fb = inject(FormBuilder);
   private ref = inject(DynamicDialogRef);
-  private config = inject(DynamicDialogConfig<MusicEventModalData>);
+  private config = inject(
+    DynamicDialogConfig<MusicEventModalData>,
+  ) as DynamicDialogConfig<MusicEventModalData>;
+  private eventFormService = inject(EventFormService);
+  private eventType: EventType = 'music';
 
   protected readonly FIELDS = MUSIC_EVENT_FORM_FIELDS;
 
-  form = this.fb.group({
-    [this.FIELDS.ID]: [this.config.data?.event?.id || ''],
-    [this.FIELDS.TITLE]: [
-      this.config.data?.event?.title || '',
-      Validators.required,
-    ],
-    [this.FIELDS.DESCRIPTION]: [
-      this.config.data?.event?.description || '',
-      Validators.required,
-    ],
-    [this.FIELDS.LOCATION]: [
-      this.config.data?.event?.location || '',
-      Validators.required,
-    ],
-    [this.FIELDS.MUSIC_GENRE]: [
-      this.config.data?.event?.musicGenre || '',
-      Validators.required,
-    ],
-  });
+  form: FormGroup = this.eventFormService.createForm<MusicFormFields>(
+    this.config.data?.event,
+    {
+      [this.FIELDS.MUSIC_GENRE]: [
+        this.config.data?.event?.musicGenre || '',
+        Validators.required,
+      ],
+    },
+  );
 
   handleSave() {
-    if (this.form.invalid) return;
+    const event = this.eventFormService.submitForm(this.form, this.eventType);
 
-    const event: Event = {
-      ...this.form.value,
-      type: 'music',
-    } as Event;
-
-    this.config.data?.saveHandler(event).subscribe(() => {
-      this.ref.close();
-    });
+    if (event) {
+      this.config.data?.saveHandler(event).subscribe(() => {
+        this.ref.close();
+      });
+    }
   }
 
   onCancel() {
@@ -64,4 +57,6 @@ export class MusicEventFormComponent {
   }
 }
 
-interface MusicEventModalData extends BaseEventModalData {}
+interface MusicEventModalData extends BaseEventModalData {
+  event?: MusicEvent;
+}

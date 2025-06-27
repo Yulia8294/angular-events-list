@@ -8,8 +8,12 @@ import {
 } from '../base-event-form/base-event-form.component';
 import { SPORT_EVENT_FORM_FIELDS } from '../event-form-fields';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { EventType, SportEvent } from '../../../model/event.model';
+import { EventFormService } from '../../../model/event-form.service';
+
+type SportFormFields = typeof SPORT_EVENT_FORM_FIELDS;
 
 @Component({
   selector: 'app-sport-event-form',
@@ -24,43 +28,33 @@ import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SportEventFormComponent {
-  private fb = inject(FormBuilder);
   private ref = inject(DynamicDialogRef);
-  private config = inject(DynamicDialogConfig<SportEventModalData>);
+  private config = inject(
+    DynamicDialogConfig<SportEventModalData>,
+  ) as DynamicDialogConfig<SportEventModalData>;
+  private eventFormService = inject(EventFormService);
+  private eventType: EventType = 'sport';
 
   protected readonly FIELDS = SPORT_EVENT_FORM_FIELDS;
 
-  form = this.fb.group({
-    [this.FIELDS.ID]: [this.config.data?.event?.id || ''],
-    [this.FIELDS.TITLE]: [
-      this.config.data?.event?.title || '',
-      Validators.required,
-    ],
-    [this.FIELDS.DESCRIPTION]: [
-      this.config.data?.event?.description || '',
-      Validators.required,
-    ],
-    [this.FIELDS.LOCATION]: [
-      this.config.data?.event?.location || '',
-      Validators.required,
-    ],
-    [this.FIELDS.PARTICIPANT_COUNT]: [
-      this.config.data?.event?.participantCount || 1,
-      Validators.required,
-    ],
-  });
+  form: FormGroup = this.eventFormService.createForm<SportFormFields>(
+    this.config.data?.event,
+    {
+      [this.FIELDS.PARTICIPANT_COUNT]: [
+        this.config.data?.event?.participantCount || 1,
+        Validators.required,
+      ],
+    },
+  );
 
   handleSave() {
-    if (this.form.invalid) return;
+    const event = this.eventFormService.submitForm(this.form, this.eventType);
 
-    const event: Event = {
-      ...this.form.value,
-      type: 'sport',
-    } as Event;
-
-    this.config.data?.saveHandler(event).subscribe(() => {
-      this.ref.close();
-    });
+    if (event) {
+      this.config.data?.saveHandler(event).subscribe(() => {
+        this.ref.close();
+      });
+    }
   }
 
   onCancel() {
@@ -68,4 +62,6 @@ export class SportEventFormComponent {
   }
 }
 
-interface SportEventModalData extends BaseEventModalData {}
+interface SportEventModalData extends BaseEventModalData {
+  event?: SportEvent;
+}
