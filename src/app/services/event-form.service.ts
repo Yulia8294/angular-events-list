@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BASE_EVENT_FORM_FIELDS } from '../components/forms/event-form-fields';
-import { Event, EventType } from './event.model';
+import { Event, EventType } from '../model/event.model';
 
 const fields = BASE_EVENT_FORM_FIELDS;
 

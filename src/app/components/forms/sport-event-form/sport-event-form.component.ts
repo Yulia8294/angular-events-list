@@ -11,7 +11,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { EventType, SportEvent } from '../../../model/event.model';
-import { EventFormService } from '../../../model/event-form.service';
+import { EventFormService } from '../../../services/event-form.service';
 
 type SportFormFields = typeof SPORT_EVENT_FORM_FIELDS;
 

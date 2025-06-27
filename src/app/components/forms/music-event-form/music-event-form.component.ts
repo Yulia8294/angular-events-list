@@ -10,7 +10,7 @@ import { EventType, MusicEvent } from '../../../model/event.model';
 import { MUSIC_EVENT_FORM_FIELDS } from '../event-form-fields';
 import { FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { EventFormService } from '../../../model/event-form.service';
+import { EventFormService } from '../../../services/event-form.service';
 
 type MusicFormFields = typeof MUSIC_EVENT_FORM_FIELDS;
 
