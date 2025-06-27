@@ -1,0 +1,22 @@
+.container {
+  height: 100%;
+
+  .header-bar {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    padding-inline: 23px;
+
+    .label {
+      color: white;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+    }
+  }
+
+  .app-content {
+    padding: 20px;
+    overflow: auto;
+  }
+}

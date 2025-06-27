@@ -1,0 +1,16 @@
+<app-base-event-form
+  [form]="form"
+  (onSave)="handleSave()"
+  (onCancel)="onCancel()"
+>
+  <form [formGroup]="form">
+    <div class="flex flex-column gap-2 w-full">
+      <label [for]="FIELDS.MUSIC_GENRE">Music genre</label>
+      <input
+        pInputText
+        [formControlName]="FIELDS.MUSIC_GENRE"
+        [id]="FIELDS.MUSIC_GENRE"
+      />
+    </div>
+  </form>
+</app-base-event-form>

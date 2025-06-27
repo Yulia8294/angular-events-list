@@ -1,0 +1,16 @@
+<app-base-event-form
+  [form]="form"
+  (onSave)="handleSave()"
+  (onCancel)="onCancel()"
+>
+  <form [formGroup]="form">
+    <div class="flex flex-column gap-2 w-full">
+      <label [for]="FIELDS.PARTICIPANT_COUNT">Participants count</label>
+      <p-inputNumber
+        [id]="FIELDS.PARTICIPANT_COUNT"
+        [formControlName]="FIELDS.PARTICIPANT_COUNT"
+        [min]="1"
+      ></p-inputNumber>
+    </div>
+  </form>
+</app-base-event-form>

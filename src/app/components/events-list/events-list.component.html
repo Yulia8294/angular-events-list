@@ -1,0 +1,79 @@
+<div>
+  <p-menu #popupMenu [popup]="true" [model]="createEventOptions"></p-menu>
+
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h1>Events</h1>
+    <p-button
+      icon="pi pi-plus"
+      label="Add New Event"
+      (onClick)="popupMenu.toggle($event)"
+      styleClass="p-button-primary"
+    ></p-button>
+  </div>
+
+  @if (events().length === 0) {
+    <div class="text-center py-4">
+      <p class="text-lg">No events found</p>
+      <p-button
+        label="Create First Event"
+        icon="pi pi-plus"
+        (onClick)="popupMenu.toggle($event)"
+      ></p-button>
+    </div>
+  } @else {
+    <p-table
+      [value]="events()"
+      [columns]="columns"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 25]"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          @for (col of columns; track col.field) {
+            <th [style]="col.style">
+              {{ col.header }}
+            </th>
+          }
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-event>
+        <tr>
+          @for (col of columns; track col.field) {
+            <td>
+              @switch (col.type) {
+                @case ("date") {
+                  <span>{{ event[col.field] | date: "mediumDate" }}</span>
+                }
+                @case ("tag") {
+                  <p-tag
+                    [value]="event.type"
+                    [severity]="getSeverity(event.type)"
+                  ></p-tag>
+                }
+                @case ("action") {
+                  <div class="flex gap-2">
+                    <p-button
+                      icon="pi pi-pencil"
+                      styleClass="p-button-rounded p-button-secondary p-button-text"
+                      (onClick)="openEditEventDialog(true, event, event.type)"
+                    ></p-button>
+                    <p-button
+                      icon="pi pi-trash"
+                      styleClass="p-button-rounded p-button-danger p-button-text"
+                      (onClick)="onDeleteClicked(event)"
+                    ></p-button>
+                  </div>
+                }
+                @default {
+                  <span>{{ event[col.field] }}</span>
+                }
+              }
+            </td>
+          }
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</div>
