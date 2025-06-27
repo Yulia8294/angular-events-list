@@ -75,7 +75,7 @@ export class EventsService {
     return of();
   }
 
-  generateId(): string {
+  private generateId(): string {
     return Math.random().toString(36).substring(2, 10);
   }
 }

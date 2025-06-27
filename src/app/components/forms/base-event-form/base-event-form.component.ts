@@ -9,11 +9,7 @@ import {
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import {
-  FormGroup,
-  ReactiveFormsModule,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BASE_EVENT_FORM_FIELDS } from '../event-form-fields';
 import { Observable } from 'rxjs';
 import { TextareaModule } from 'primeng/textarea';
